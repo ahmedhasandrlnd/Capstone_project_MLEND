@@ -101,8 +101,14 @@ In the first step, I'll use OpenCV's implementation of Haar feature-based cascad
 
 <a id='algo'></a>
 ### Benchmark Model
-<p> Our model will be compared with different benchmark models in a 
-kaggle competition(https://www.kaggle.com/c/dog-breed-identification/discussion)
+<p> Our models were compared with different benchmark data in a 
+kaggle competition(https://www.kaggle.com/c/dog-breed-identification/discussion).The first model used VGG-16 bottleneck features and the second model used VGG-19 bottleneck features. Out of 4545 test images from the benchmark data, the first model misclassified 1193 images as top-1 error, 425 images as top-3 error and 254 images as top-5 error which gives a top-1 error rate of 26.25%, top-3 error rate of 9.35% and top-5 error rate of 5.85%. On the contrary, the second model misclassified 862 images as top-1 error, 247 images as top-3 error and 99 images as top-1 error which gives a top-1 error rate of 18.97%, top-3 error rate of 5.43% and top-5 error rate of 2.18%.
+
+|         Model          |      Accuracy     | Top-1 Error Rate | Top-3 Error Rate | Top-5 Error Rate |
+| :--------------------: | :---------------: | :--------------: | :--------------: | :--------------: | 
+|    Pretrained VGG16    |      73.75%       |      26.25%      |      9.35%       |      5.85%       |
+|    Pretrained VGG19    |      81.03%       |      18.97%      |      5.43%       |      2.18%       |
+
 
 <a id='preprocess'></a>
 ## Data Preprocessing
