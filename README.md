@@ -73,6 +73,7 @@ In the case of top-5 error, we check if the target label is not one of our top 5
 
 <a id='explore'></a>
 ## Data Exploration and Visualization
+<p> The dog dataset has 6680 images for training, 835 images for validation and 836 images for testing of 133 breeds. All these images have RGB channels and different sizes. So, they need to normalized and resiaed before using in the deep learning model.
 From the train, test and valid dataset of dog images, we get the following distribution and statistics from ```dog_app2.ipynb```:
 ![train_dist](images/train_dist.PNG)
 ![test_dist](images/test_dist.PNG)
@@ -84,8 +85,6 @@ From the train, test and valid dataset of dog images, we get the following distr
 
 [Back to Table of Content](#index)
 
-### Datasets and Inputs
-<p> The dog dataset has 6680 images for training, 835 images for validation and 836 images for testing of 133 breeds. The human dataset has 13233 human images. All these images have RGB channels and different sizes. So, they need to normalized and resiaed before using in the deep learning model.
 
 ### Solution Statement
 <p> The solution of the project is divided into following steps:
