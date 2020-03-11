@@ -9,6 +9,8 @@
 - [Problem Statement](#statement)
 - [Metrics](#metrics)
 - [Data Exploration and Visualization](#explore)
+- [Algorithm and Techniques](#algo)
+- [Benchmark](#bench)
 - [Data Preprocessing](#preprocess)
 - [Implementation](#implement)
   - [Step 1](#step1): Detect Humans
@@ -88,26 +90,101 @@ From the train, test and valid dataset of dog images, we get the following distr
 
 [Back to Table of Content](#index)
 
-
-### Solution Statement
+<a id='algo'></a>
+### Algorithm and Techniques
 <p> The solution of the project is divided into following steps:
 In the first step, I'll use OpenCV's implementation of Haar feature-based cascade classifiers to detect human faces in images. In the seond step, I'll use a pre-trained VGG16 model to detect dogs in images. In the third step, I'll create a CNN that classifies dog breeds. I'll create my CNN from scratch to attain a test accuracy of at least 1%. In the fourth step, I'll use the pre-trained VGG-16 model as a fixed feature extractor, where the last convolutional output of VGG-16 is fed as input to my model. In Step 5, I'll use transfer learning to create a CNN using VGG-19 bottleneck features. In the last step, I'll write an algorithm that accepts a file path to an image and first determines whether the image contains a human, dog, or neither. Then, if a dog is detected in the image, return the predicted breed. If a human is detected in the image, return the resembling dog breed. Otherwise, it provides output that indicates an error.
 
+<hr/> 
+
+[Back to Table of Content](#index)
+
+<a id='algo'></a>
 ### Benchmark Model
 <p> Our model will be compared with different benchmark models in a 
 kaggle competition(https://www.kaggle.com/c/dog-breed-identification/discussion)
 
-### Evaluation Metrics
-<p> Since we are dealing with a multi-classification problem here and the data is slightly imbalanced, I used accuracy evaluation metric and negative log-likelihood loss function. The main objective in a learning model is to reduce (minimize) the loss function's value with respect to the model's parameters by changing the weight vector values through different optimization methods, such as backpropagation in neural networks.
+<a id='preprocess'></a>
+## Data Preprocessing
+Each image in the train, valid and text dataset goes thorugh a number of preprocessing steps:
+
+1. Train and Valid Dataset images goes through a series of transforms.RandomRotation(10), transforms.Resize(256), transforms.CenterCrop(224),transforms.RandomHorizontalFlip()
+1. Test Dataset images goes through a series of transforms.Resize(256) and transforms.CenterCrop(224) 
+1. Normalize: Each image is normalized by mean=[0.485, 0.456, 0.406] and std=[0.229, 0.224, 0.225]
+
+<hr/> 
+
+[Back to Table of Content](#index)
 
 
-### Project Design
-- [Implementation](#implement)
-  - [Step 1](#step1): Detect Humans
-  - [Step 2](#step2): Detect Dogs
-  - [Step 3](#step3): Create a CNN to Classify Dog Breeds (from Scratch)
-  - [Step 4](#step4): Use a CNN to Classify Dog Breeds (using Transfer Learning)
-  - [Step 5](#step5): Create a CNN to Classify Dog Breeds (using Transfer Learning)
-  - [Step 6](#step6): Write Algorithm
+<a id='implement'></a>
+## Implementation
+The implementation of the project is divided into following steps:
+
+<a id='step1'></a>
+### Step 1: Detect Humans
+
+We use OpenCV's implementation of Haar feature-based cascade classifiers to detect human faces in images. OpenCV provides many pre-trained face detectors, stored as XML files on github. We have downloaded one of these detectors and stored it in the haarcascades directory.<br/>
+Before using any of the face detectors, it is standard procedure to convert the images to grayscale. The detectMultiScale function executes the classifier stored in face_cascade and takes the grayscale image as a parameter. 
+
+<hr/> 
+
+[Back to Table of Content](#index)
+
+<a id='step2'></a>
+### Step 2: Detect Dogs
+We use a pre-trained VGG16 model to detect dogs in images. Our first line of code downloads the ResNet-50 model, along with weights that have been trained on ImageNet, a very large, very popular dataset used for image classification and other vision tasks. ImageNet contains over 10 million URLs, each linking to an image containing an object from one of 1000 categories. Given an image, this pre-trained VGG16 model returns a prediction (derived from the available categories in ImageNet) for the object that is contained in the image.<br/>
+While looking at the [dictionary](https://gist.github.com/yrevar/942d3a0ac09ec9e5eb3a), you will notice that the categories corresponding to dogs appear in an uninterrupted sequence and correspond to dictionary keys 151-268, inclusive, to include all categories from `'Chihuahua'` to `'Mexican hairless'`.  Thus, in order to check to see if an image is predicted to contain a dog by the pre-trained VGG16 model, we need only check if the `ResNet50_predict_labels` function above returns a value between 151 and 268 (inclusive).
+
+[Back to Table of Content](#index)
+
+<a id='step3'></a>
+### Step 3: Create a CNN to Classify Dog Breeds (from Scratch)
+Now that we have functions for detecting humans and dogs in images, we need a way to predict breed from images. In this step, we create a CNN that classifies dog breeds. We create our CNN from scratch to attain a test accuracy of at least 1%.
+
+[Back to Table of Content](#index)
+
+<a id='step4'></a>
+### Step 4: Use a CNN to Classify Dog Breeds (using Transfer Learning)
+To reduce training time without sacrifysing accuracy, we have used the pre-trained VGG-16 model as a fixed feature extractor, where the last convolutional output of VGG-16 is fed as input to our model. We only add a global average pooling layer and a fully connected layer, where the latter contains one node for each dog category and is equipped with a softmax.
+
+[Back to Table of Content](#index)
+
+<a id='step5'></a>
+### Step 5: Create a CNN to Classify Dog Breeds (using a different Transfer Learning)- Refinement
+In Step 5, we used transfer learning to create a CNN using VGG-19 bottleneck features. In this section, we used the bottleneck features from a different pre-trained model such as VGG19. 
+
+[Back to Table of Content](#index)
+
+
+<a id='step6'></a>
+### Step 6: Write your Algorithm
+In this step, we write an algorithm that accepts a file path to an image and first determines whether the image contains a human, dog, or neither. Then,
+* if a dog is detected in the image, return the predicted breed.
+* if a human is detected in the image, return the resembling dog breed.
+* if neither is detected in the image, provide output that indicates an error.
+
+[Back to Table of Content](#index)
+
+<hr/> 
+
+[Back to Table of Content](#index)
+
+
+<a id='refine'></a>
+## Refinement
+In our first design, we have used transfer learning to create a CNN using VGG-16 bottleneck features. As a refinement, in our second model we have used transfer learning to create a CNN using VGG-19 bottleneck features. Second model gives slightly better results with better performance metrics. Please refer to the [next section](#eval) for a detailed comparison. Here are some missclassified images (top-5 error images) from the first model prediction:
+![top-5](images/model1_top5.PNG)
+
+Here are some missclassified images (top-5 error images) from the second model prediction:
+![top-5](images/model2_top5.PNG)
+
+From these two figures, we can see that out of these 9 images, 5 images were misclassified by both models. But each model made some unique mistakes as well from the other model.
+
+<br/>
+<hr/> 
+
+[Back to Table of Content](#index)
+
 
 [1] Olga Russakovsky*, Jia Deng*, Hao Su, Jonathan Krause, Sanjeev Satheesh, Sean Ma, Zhiheng Huang, Andrej Karpathy, Aditya Khosla, Michael Bernstein, Alexander C. Berg and Li Fei-Fei. (* = equal contribution) ImageNet Large Scale Visual Recognition Challenge. IJCV, 2015.
