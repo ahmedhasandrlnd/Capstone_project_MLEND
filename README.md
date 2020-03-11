@@ -75,8 +75,11 @@ In the case of top-5 error, we check if the target label is not one of our top 5
 ## Data Exploration and Visualization
 <p> The dog dataset has 6680 images for training, 835 images for validation and 836 images for testing of 133 breeds. All these images have RGB channels and different sizes. So, they need to normalized and resiaed before using in the deep learning model.
 From the train, test and valid dataset of dog images, we get the following distribution and statistics from ```dog_app2.ipynb```:
+
 ![train_dist](images/train_dist.PNG)
+
 ![test_dist](images/test_dist.PNG)
+
 ![valid_dist](images/valid_dist.PNG)
 
 ![stat](images/stat.PNG)
