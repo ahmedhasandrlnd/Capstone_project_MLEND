@@ -24,23 +24,17 @@
 - [Justification](#just)
 - [Reflection](#reflection)
 - [Improvement](#improvement)
-- [Flask Web App](#flask)
-  	- [Dog detection and Breed Prediction](#dog)
-  	- [Human or Unknown Detection](#human)
-  	- [Top5 Prediction](#top5)
-- [Web App Usage Instructions](#run)
-   	- [Running in localhost](#local)
-  	- [ngrok Deployment](#ngrok)
-
 - [Software Requirements](#sw)
 - [Files](#files)
-- [Credits and Acknowledgements](#credits)
+- [References](#ref)
 
 
 <a id='overview'></a>
 ### Project Overview
 <img src="Norfolk.jpg" width="200"> | <img src="Norwich.jpg" width="200">
 <p> There are thousands of different dog breeds in the world. Some of these dog breeds are too close to differentiate from their images. For example, the above two dogs seem to belong to the same breed. But, the left one is Norfolk Terrier, and the right one Norwich Terrier.  With the advancement of technology, computers are getting enough intelligent to distigush different classes of objects from their images. Since 2010, the ImageNet project runs an annual software contest, the ImageNet Large Scale Visual Recognition Challenge (ILSVRC), where software programs compete to correctly classify and detect objects and scenes useing one thousand non-overlapping classes [1]. In this capstone project, I want to leverage the state of art of image classification model on Imagenet to teach computer to predict 133 dog's breed from an image using deep learning algorithms.
+
+<hr/> 
 
 [Back to Table of Content](#index)
 
@@ -142,11 +136,15 @@ Before using any of the face detectors, it is standard procedure to convert the 
 We use a pre-trained VGG16 model to detect dogs in images. Our first line of code downloads the ResNet-50 model, along with weights that have been trained on ImageNet, a very large, very popular dataset used for image classification and other vision tasks. ImageNet contains over 10 million URLs, each linking to an image containing an object from one of 1000 categories. Given an image, this pre-trained VGG16 model returns a prediction (derived from the available categories in ImageNet) for the object that is contained in the image.<br/>
 While looking at the [dictionary](https://gist.github.com/yrevar/942d3a0ac09ec9e5eb3a), you will notice that the categories corresponding to dogs appear in an uninterrupted sequence and correspond to dictionary keys 151-268, inclusive, to include all categories from `'Chihuahua'` to `'Mexican hairless'`.  Thus, in order to check to see if an image is predicted to contain a dog by the pre-trained VGG16 model, we need only check if the `ResNet50_predict_labels` function above returns a value between 151 and 268 (inclusive).
 
+<hr/> 
+
 [Back to Table of Content](#index)
 
 <a id='step3'></a>
 ### Step 3: Create a CNN to Classify Dog Breeds (from Scratch)
 Now that we have functions for detecting humans and dogs in images, we need a way to predict breed from images. In this step, we create a CNN that classifies dog breeds. We create our CNN from scratch to attain a test accuracy of at least 1%.
+
+<hr/> 
 
 [Back to Table of Content](#index)
 
@@ -154,11 +152,15 @@ Now that we have functions for detecting humans and dogs in images, we need a wa
 ### Step 4: Use a CNN to Classify Dog Breeds (using Transfer Learning)
 To reduce training time without sacrifysing accuracy, we have used the pre-trained VGG-16 model as a fixed feature extractor, where the last convolutional output of VGG-16 is fed as input to our model. We only add a global average pooling layer and a fully connected layer, where the latter contains one node for each dog category and is equipped with a softmax.
 
+<hr/> 
+
 [Back to Table of Content](#index)
 
 <a id='step5'></a>
 ### Step 5: Create a CNN to Classify Dog Breeds (using a different Transfer Learning)- Refinement
 In Step 5, we used transfer learning to create a CNN using VGG-19 bottleneck features. In this section, we used the bottleneck features from a different pre-trained model such as VGG19. 
+
+<hr/> 
 
 [Back to Table of Content](#index)
 
@@ -170,12 +172,9 @@ In this step, we write an algorithm that accepts a file path to an image and fir
 * if a human is detected in the image, return the resembling dog breed.
 * if neither is detected in the image, provide output that indicates an error.
 
-[Back to Table of Content](#index)
-
 <hr/> 
 
 [Back to Table of Content](#index)
-
 
 <a id='refine'></a>
 ## Refinement
@@ -204,6 +203,10 @@ Now, we are going to show the comparison of performance metrics of two of our mo
 The performance can be further improved by using some other pretrained model such as Densenet, Resnet or Inception models.
 <br/>
 
+<hr/> 
+
+[Back to Table of Content](#index)
+
 <a id='just'></a>
 ## Justification
 Due to less number of dog images of certain breeds, the model finds it difficult to predict some breeds.  
@@ -214,6 +217,7 @@ Also we have found the model fails to correctly classify german wirehaired point
 It also couldn’t distinguish between Mastiff and Bullmastiff, which is a mix between a bulldog and a mastiff.
 <br/><br/>
 [Bulldog]<img src="images/Bulldog.jpg" width="20%">|[Mastiff]<img src="images/Mastiff.jpg" width="20%">|[Bullmastiff]<img src="images/Bullmastiff.jpg" width="20%"> <br/>
+
 <hr/> 
 
 [Back to Table of Content](#index)
@@ -226,6 +230,7 @@ These are the intersting or difficult aspects of this present application:
 1. __WEB DEPLOYMENT__: Due to some credit problem, we haven't tried to deploy our application in an external server. But we have used ngrok, which provide us a public URL for our application running in local web server.
 1. __KERAS vs PYTORCH__: Due to my prevoius familiarity with Pytorch, I have implemented all model using Pytorch instead of Keras with the approval of my mentor.  
 
+<hr/>
 
 [Back to Table of Content](#index)
 
@@ -241,4 +246,49 @@ These are the improvement ideas on this present application:
 1. __AWS, GCP or AZURE DEPLOYMENT__: It would be a good learning experience if we could depoly our web application to AWS, GCP or AZURE platform.
 
 
+<hr/>
+
+[Back to Table of Content](#index)
+
+<a id='sw'></a>
+## Software Requirements
+This project uses **Python 3.6.6** and the necessary libraries are mentioned in _requirements.txt_.
+<hr/> 
+
+[Back to Table of Content](#index)
+
+<a id='files'></a>
+
+## 6. Files
+<pre>
++
+|---README.md 					# Readme file
+|---requirements.txt			# Required packages
+|---images                      # images folder    
+|                     
+|---+---benchmark               # benchmark dataset 
+|   | 
+|   +---model   				# saved model folder 
+|       
++---dog_app1.ipynb              # notebook to implement model1 using pretrained VGG16 
++---dog_app2.ipynb              # notebook to implement model1 using pretrained VGG19
++---dog_app3.ipynb              # notebook to visualization and error calculation  
++---dog_app4.ipynb              # notebook to benchmark calculation   
+
+</pre>
+<hr/> 
+
+[Back to Table of Content](#index)
+
+
+
+
+
+<a id='ref'></a>
+### Reference
+
 [1] Olga Russakovsky*, Jia Deng*, Hao Su, Jonathan Krause, Sanjeev Satheesh, Sean Ma, Zhiheng Huang, Andrej Karpathy, Aditya Khosla, Michael Bernstein, Alexander C. Berg and Li Fei-Fei. (* = equal contribution) ImageNet Large Scale Visual Recognition Challenge. IJCV, 2015.
+
+<hr/>
+
+[Back to Table of Content](#index)
